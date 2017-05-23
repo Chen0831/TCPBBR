@@ -1,0 +1,37 @@
+# -tcp_bbr-
+
+下载最新内核,最新内核查看[这里]（http://kernel.ubuntu.com/~kernel-ppa/mainline/）
+
+
+    wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.9/linux-image-4.9.0-040900-generic_4.9.0-040900.201612111631_amd64.deb
+
+#安装内核
+
+    dpkg -i linux-image-4.9.0*.deb
+
+dpkg -l|grep linux-image 
+
+
+
+apt-get purge 旧内核  (ps:我不是很明吧这个汉字的意思)
+
+
+更新 grub 系统引导文件并重启
+
+
+update-grub
+
+
+reboot
+
+
+echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
+
+
+echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+
+
+保存生效sysctl -p
+执行sysctl net.ipv4.tcp_available_congestion_control
+如果结果中有bbr, 则证明你的内核已开启bbr
+执行lsmod | grep bbr, 看到有 tcp_bbr 模块即说明bbr已启动
